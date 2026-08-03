@@ -1,0 +1,28 @@
+{
+  "name": "smart-split",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Smart Split - Rapid Prototype",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "npm run dev --workspace=apps/server",
+    "mobile": "npm run start --workspace=apps/mobile"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/saiGaneshChillara/smart-split-rapid-prototype.git"
+  },
+  "keywords": [
+    "smart-split",
+    "expense-splitting"
+  ],
+  "author": "Ganesh Chillara",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/saiGaneshChillara/smart-split-rapid-prototype/issues"
+  },
+  "homepage": "https://github.com/saiGaneshChillara/smart-split-rapid-prototype#readme"
+}
