@@ -15,6 +15,13 @@
       "when": 1786299985449,
       "tag": "0001_worried_the_renegades",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1786301772239,
+      "tag": "0002_yielding_dreaming_celestial",
+      "breakpoints": true
     }
   ]
 }
