@@ -8,6 +8,13 @@
       "when": 1786258352841,
       "tag": "0000_clever_senator_kelly",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1786299985449,
+      "tag": "0001_worried_the_renegades",
+      "breakpoints": true
     }
   ]
 }
