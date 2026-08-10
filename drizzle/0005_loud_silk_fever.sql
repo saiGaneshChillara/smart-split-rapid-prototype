@@ -1,0 +1,2 @@
+CREATE TYPE "public"."expense_item_split_type" AS ENUM('EQUAL', 'PERCENTAGE', 'EXACT');--> statement-breakpoint
+ALTER TABLE "expense_items" ADD COLUMN "split_type" "expense_item_split_type" DEFAULT 'EQUAL' NOT NULL;
