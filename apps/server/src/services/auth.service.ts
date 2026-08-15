@@ -3,6 +3,7 @@ import { v4 as uuid } from "uuid";
 import { db } from "../db/client.js";
 import { users } from "../db/schema/users.js";
 import { generateAccessToken } from "../utils/jwt.js";
+import { ApiError } from "../errors/ApiErrorr.js";
 
 export const requestOtp = async (phoneNumber: string) => {
   // TODO: Implement OTP service provider
@@ -17,7 +18,7 @@ export const verifyOtp = async (
   name?: string,
 ) => {
   if (otp !== "123456") {
-    throw new Error("Invalid OTP");
+    throw new ApiError(401, "Invalid OTP");
   }
 
   const user = await db.query.users.findFirst({
@@ -32,7 +33,7 @@ export const verifyOtp = async (
   }
 
   if (!name) {
-    throw new Error("Name is required");
+    throw new ApiError(400, "Name is required for new users");
   }
 
   const newUser = {

@@ -2,6 +2,7 @@ import express from "express";
 import { env } from "./config/env.js";
 
 import authRoutes from "./routes/auth.routes.js";
+import { errorMiddleware } from "./middleware/error.middleware.js";
 
 const app = express();
 
@@ -15,6 +16,8 @@ app.get("/health", (_req, res) => {
     message: "Smart-Split API is running",
   });
 });
+
+app.use(errorMiddleware);
 
 app.listen(env.PORT, () => {
   console.log(`Server is running on port ${env.PORT}`);
