@@ -5,6 +5,7 @@ import { users } from "../db/schema/users.js";
 import { ApiError } from "../errors/ApiError.js";
 import { generateAccessToken } from "../utils/jwt.js";
 
+
 export const requestOtp = async (phoneNumber: string) => {
   // TODO: Implement OTP service provider
   return {
@@ -12,12 +13,19 @@ export const requestOtp = async (phoneNumber: string) => {
   };
 };
 
+const DEV_STUB_OTP = "123456";
+
+// TODO SECURITY: this is stub until a real OTP/SMS provider is wired up
 export const verifyOtp = async (
   phoneNumber: string,
   otp: string,
   name?: string,
 ) => {
-  if (otp !== "123456") {
+  if (process.env.NODE_ENV === "production") {
+    throw new ApiError(501, "OTP verification is not yet implemented");
+  }
+
+  if (otp !== DEV_STUB_OTP) {
     throw new ApiError(401, "Invalid OTP");
   }
 
