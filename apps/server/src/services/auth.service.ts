@@ -2,8 +2,8 @@ import { eq } from "drizzle-orm";
 import { v4 as uuid } from "uuid";
 import { db } from "../db/client.js";
 import { users } from "../db/schema/users.js";
+import { ApiError } from "../errors/ApiError.js";
 import { generateAccessToken } from "../utils/jwt.js";
-import { ApiError } from "../errors/ApiErrorr.js";
 
 export const requestOtp = async (phoneNumber: string) => {
   // TODO: Implement OTP service provider

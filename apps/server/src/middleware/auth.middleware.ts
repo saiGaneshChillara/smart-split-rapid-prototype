@@ -1,10 +1,10 @@
+import { eq } from "drizzle-orm";
 import { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
-import { eq } from "drizzle-orm";
-import { ApiError } from "../errors/ApiErrorr.js";
 import { env } from "../config/env.js";
 import { db } from "../db/client.js";
 import { users } from "../db/schema/users.js";
+import { ApiError } from "../errors/ApiError.js";
 
 type JwtPayload = {
   sub: string;

@@ -34,6 +34,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         }
 
         const currentUser = await getCurrentUser();
+        setToken(sharedToken);
         setUser(currentUser);
       } catch(error) {
         await authStorage.removeToken();
@@ -42,9 +43,8 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       } finally {
         setLoading(false);
       };
-
-      bootstrap();
     };
+    bootstrap();
   }, []);
 
   const login = async (accesToken: string, user: User) => {

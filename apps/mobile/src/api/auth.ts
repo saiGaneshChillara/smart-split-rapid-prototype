@@ -8,7 +8,7 @@ export const requestOtp = async (phoneNumber: string) => {
   return response.data;
 };
 
-export const verfiyOtp = async (
+export const verifyOtp = async (
   phoneNumber: string,
   otp: string,
   name?: string,
