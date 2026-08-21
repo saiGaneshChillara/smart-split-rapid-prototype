@@ -1,7 +1,12 @@
 import { Request, Response } from "express";
 import * as authService from "../services/auth.service.js";
+import z from "zod";
+import { requestOtpSchema, verifyOtpSchema } from "../schemas/auth.schema.js";
 
-export const requestOtp = async (req: Request, res: Response) => {
+export const requestOtp = async (
+  req: Request<{}, {}, z.infer<typeof requestOtpSchema>>,
+  res: Response,
+) => {
   const { phoneNumber } = req.body;
 
   const result = await authService.requestOtp(phoneNumber);
@@ -9,7 +14,10 @@ export const requestOtp = async (req: Request, res: Response) => {
   res.status(200).json(result);
 };
 
-export const verifyOtp = async (req: Request, res: Response) => {
+export const verifyOtp = async (
+  req: Request<{}, {}, z.infer<typeof verifyOtpSchema>>,
+  res: Response,
+) => {
   const { phoneNumber, otp, name } = req.body;
 
   const result = await authService.verifyOtp(
