@@ -7,8 +7,8 @@ import { ApiError } from "../errors/ApiError.js";
  * Validates and replaces req.body with the parsed result of schema.
  * Rejects with a 400 ApiError on failure.
  */
-export const validateBody = (schema: ZodType) 
-  => (req: Request, _res: Response, next: NextFunction) => {
+export const validateBody = 
+  (schema: ZodType)  => (req: Request, _res: Response, next: NextFunction) => {
     const result = schema.safeParse(req.body);
 
     if (!result.success) {
