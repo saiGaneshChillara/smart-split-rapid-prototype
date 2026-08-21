@@ -2,7 +2,6 @@ import { Router } from "express";
 import * as authController from "../controllers/auth.controller.js";
 import { validateBody } from "../middleware/validate.middleware.js";
 import { requestOtpSchema, verifyOtpSchema } from "../schemas/auth.schema.js";
-import { validate } from "uuid";
 
 const router = Router();
 
