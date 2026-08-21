@@ -44,14 +44,15 @@ export const verifyOtp = async (
     throw new ApiError(400, "Name is required for new users");
   }
 
-  const newUser = {
-    id: uuid(),
-    phone_number: phoneNumber,
-    name,
-  };
-
-  await db.insert(users).values(newUser);
-
+  const [newUser] = await db
+    .insert(users)
+    .values({
+      id: uuid(),
+      phone_number: phoneNumber,
+      name,
+    })
+    .returning();
+  
   return {
     accessToken: generateAccessToken(newUser.id),
     user: newUser,
