@@ -1,6 +1,7 @@
 import { ActivityIndicator, View } from "react-native";
 import { useAuth } from "../context/AuthContext";
 import { AuthNavigator } from "./AuthNavigator";
+import { AppNavigator } from "./AppNavigator";
 
 export const RootNavigator = () => {
   const { loading, isAuthenticated } = useAuth();
