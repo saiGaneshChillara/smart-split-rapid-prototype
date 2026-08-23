@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import { InteractionManager, Pressable, StyleSheet, TextInput, View } from "react-native";
+import { Pressable, StyleSheet, TextInput, View } from "react-native";
 import { colors, spacing } from "../theme";
 import { AppText } from "./AppText";
 
@@ -25,13 +25,19 @@ export const OtpInput = ({
   }, []);
 
   const handlePress = () => {
-    console.log("Pressed OTP text box");
-    inputRef.current?.focus();
+    if (inputRef.current?.isFocused()) {
+      inputRef.current.blur();
+      requestAnimationFrame(() => {
+        inputRef.current?.focus();
+      });
+    } else {
+      inputRef.current?.focus();
+    }
   };
 
   return (
     <View>
-      <TextInput 
+      <TextInput
         ref={inputRef}
         value={value}
         onChangeText={(text) => {
@@ -41,16 +47,10 @@ export const OtpInput = ({
         maxLength={length}
         autoFocus
         blurOnSubmit={false}
-        contextMenuHidden={false}
         textContentType="oneTimeCode"
         autoComplete="sms-otp"
         caretHidden
-        style={{
-          width: "100%",
-          height: 50,
-          borderWidth: 1,
-          borderColor: "red",
-        }}
+        style={styles.hiddenInput}
       />
 
       <Pressable onPress={handlePress}>
