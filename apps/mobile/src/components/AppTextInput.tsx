@@ -1,4 +1,4 @@
-import { forwardRef } from "react";
+import { forwardRef, ReactNode } from "react";
 import { StyleSheet, TextInput, TextInputProps, View } from "react-native";
 import { colors, spacing, typography } from "../theme";
 import { AppText } from "./AppText";
@@ -6,10 +6,11 @@ import { AppText } from "./AppText";
 type AppTextInputProps = TextInputProps & {
   label?: string;
   error?: string;
+  leftElement?: ReactNode;
 };
 
 export const AppTextInput = forwardRef<TextInput, AppTextInputProps>(
-  ({ label, error, ...props }, ref) => {
+  ({ label, error, leftElement, ...props }, ref) => {
     return (
       <View style={styles.wrapper}>
         {label && (
@@ -26,6 +27,7 @@ export const AppTextInput = forwardRef<TextInput, AppTextInputProps>(
             error && styles.errorBorder,
           ]}
         >
+          {leftElement}
           <TextInput
             ref={ref}
             placeholderTextColor={colors.textSecondary}
@@ -51,12 +53,15 @@ AppTextInput.displayName = "AppTextInput";
 
 const styles = StyleSheet.create({
   container: {
+    flexDirection: "row",
+    alignItems: "center",
     borderWidth: 1,
     borderColor: colors.border,
     borderRadius: 12,
     backgroundColor: colors.white,
   },
   input: {
+    flex: 1,
     ...typography.body,
     color: colors.text,
     paddingHorizontal: spacing.md,
