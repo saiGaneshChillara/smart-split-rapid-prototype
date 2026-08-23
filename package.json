@@ -24,5 +24,8 @@
   "bugs": {
     "url": "https://github.com/saiGaneshChillara/smart-split-rapid-prototype/issues"
   },
-  "homepage": "https://github.com/saiGaneshChillara/smart-split-rapid-prototype#readme"
+  "homepage": "https://github.com/saiGaneshChillara/smart-split-rapid-prototype#readme",
+  "dependencies": {
+    "react-native-keyboard-aware-scroll-view": "^0.9.5"
+  }
 }
