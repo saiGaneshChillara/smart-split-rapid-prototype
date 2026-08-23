@@ -1,7 +1,8 @@
-import { useEffect, useRef } from "react";
+import { forwardRef, useEffect, useImperativeHandle, useRef } from "react";
 import { Pressable, StyleSheet, TextInput, View } from "react-native";
 import { colors, spacing } from "../theme";
 import { AppText } from "./AppText";
+import App from "../../App";
 
 type Props = {
   value: string;
@@ -9,76 +10,75 @@ type Props = {
   length?: number;
 };
 
-export const OtpInput = ({
-  value,
-  onChange,
-  length = 6
-}: Props) => {
-  const inputRef = useRef<TextInput>(null);
-
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      inputRef.current?.focus();
-    }, 200);
-
-    return () => clearTimeout(timeout);
-  }, []);
-
-  const handlePress = () => {
-    if (inputRef.current?.isFocused()) {
-      inputRef.current.blur();
-      requestAnimationFrame(() => {
-        inputRef.current?.focus();
-      });
-    } else {
-      inputRef.current?.focus();
-    }
-  };
-
-  return (
-    <View>
-      <TextInput
-        ref={inputRef}
-        value={value}
-        onChangeText={(text) => {
-          onChange(text.replace(/\D/g, ""))
-        }}
-        keyboardType="number-pad"
-        maxLength={length}
-        autoFocus
-        blurOnSubmit={false}
-        textContentType="oneTimeCode"
-        autoComplete="sms-otp"
-        caretHidden
-        style={styles.hiddenInput}
-      />
-
-      <Pressable onPress={handlePress}>
-        <View style={styles.container}>
-          {Array.from({ length }).map((_, index) => {
-            const digit = value[index] ?? "";
-
-            const isActive = value.length === index || (value.length === length && index === length - 1);
-
-            return (
-              <View
-                key={index}
-                style={[
-                  styles.cell,
-                  isActive && styles.activeCell,
-                ]}
-              >
-                <AppText variant="heading">
-                  {digit}
-                </AppText>
-              </View>
-            );
-          })}
-        </View>
-      </Pressable>
-    </View>
-  );
+export type OtpInutHandle = {
+  focus: () => void;
 };
+
+export const OtpInput = forwardRef<OtpInutHandle, Props>(
+  ({ value, onChange, length = 6 }, ref) => {
+    const inputRef = useRef<TextInput>(null);
+
+    useImperativeHandle(ref, () => ({
+      focus: () => inputRef.current?.focus(),
+    }));
+
+    const handlePress = () => {
+      if (inputRef.current?.isFocused()) {
+        inputRef.current.blur();
+        requestAnimationFrame(() => {
+          inputRef.current?.focus();
+        });
+      } else {
+        inputRef.current?.focus();
+      }
+    };
+
+    return (
+      <View>
+        <TextInput 
+          ref={inputRef}
+          value={value}
+          onChangeText={(text) => {
+            onChange(text.replace(/\D/g, ""))
+          }}
+          keyboardType="number-pad"
+          maxLength={length}
+          blurOnSubmit={false}
+          textContentType="oneTimeCode"
+          autoComplete="sms-otp"
+          caretHidden
+          style={styles.hiddenInput}
+        />
+
+        <Pressable onPress={handlePress}>
+          <View style={styles.container}>
+            {Array.from({ length }).map((_, index) => {
+              const digit = value[index] ?? "";
+
+              const isActive = value.length === index || (value.length === length && index === length - 1);
+
+              return (
+                <View
+                  key={index}
+                  style={[
+                    styles.cell,
+                    isActive && styles.activeCell,
+                  ]}
+                >
+                  <AppText variant="heading">
+                    {digit}
+                  </AppText>
+                </View>
+              );
+            })}
+          </View>
+        </Pressable>
+      </View>
+    );
+  }
+);
+
+OtpInput.displayName = "OtpInput";
 
 const styles = StyleSheet.create({
   hiddenInput: {

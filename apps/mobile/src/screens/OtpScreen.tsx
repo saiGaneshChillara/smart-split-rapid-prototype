@@ -1,9 +1,9 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { AppButton } from '../components/AppButton';
 import { AppText } from '../components/AppText';
 import { Card } from '../components/Card';
-import { OtpInput } from '../components/OtpInput';
+import { OtpInput, OtpInutHandle } from '../components/OtpInput';
 import { Screen } from '../components/Screen';
 import { Stack } from '../components/Stack';
 import { AuthStackParamList } from '../navigation/AuthNavigator';
@@ -14,12 +14,21 @@ type Props = NativeStackScreenProps<
   "VerifyOtp"
 >;
 
-const OtpScreen = ({ route }: Props) => {
+const OtpScreen = ({ route, navigation }: Props) => {
   const { phoneNumber } = route.params;
 
   const [otp, setOtp] = useState("");
+  const otpInputRef = useRef<OtpInutHandle>(null);
 
   const isValidOtp = otp.length === 6;
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener("transitionEnd", () => {
+      otpInputRef.current?.focus();
+    });
+
+    return unsubscribe;
+  }, [navigation]);
 
   return (
     <Screen>
@@ -42,6 +51,7 @@ const OtpScreen = ({ route }: Props) => {
             </AppText>
 
             <OtpInput
+              ref={otpInputRef}
               value={otp}
               onChange={setOtp}
             />
