@@ -8,6 +8,10 @@ import { Screen } from '../components/Screen';
 import { Stack } from '../components/Stack';
 import { AuthStackParamList } from '../navigation/AuthNavigator';
 import { colors } from '../theme';
+import { useAuth } from '../context/AuthContext';
+import { verifyOtp } from '../api/auth';
+import { Alert } from 'react-native';
+import { getApiErrorMessage } from '../utils/apiError';
 
 type Props = NativeStackScreenProps<
   AuthStackParamList,
@@ -21,6 +25,32 @@ const OtpScreen = ({ route, navigation }: Props) => {
   const otpInputRef = useRef<OtpInutHandle>(null);
 
   const isValidOtp = otp.length === 6;
+
+  const { login, loading: authLoading } = useAuth();
+
+  const [loading, setLoading] = useState(authLoading);
+
+  const handleVerify = async () => {
+    try {
+      setLoading(true);
+
+      const response = await verifyOtp(phoneNumber, otp);
+
+      if (response.requiresRegistration) {
+        navigation.replace("CompleteProfile", {
+          phoneNumber,
+          otp,
+        });
+        return;
+      }
+
+      await login(response.accessToken, response.user);
+    } catch (error) {
+      Alert.alert("Verification failed", getApiErrorMessage(error));
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
     const unsubscribe = navigation.addListener("transitionEnd", () => {
@@ -59,8 +89,9 @@ const OtpScreen = ({ route, navigation }: Props) => {
 
           <AppButton
             title='Verify'
-            disabled={!isValidOtp}
-            onPress={() => { }}
+            disabled={!isValidOtp || loading}
+            loading={loading}
+            onPress={handleVerify}
           />
         </Stack>
       </Card>
