@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { AppButton } from '../components/AppButton';
 import { AppText } from '../components/AppText';
 import { Card } from '../components/Card';
-import { OtpInput, OtpInutHandle } from '../components/OtpInput';
+import { OtpInput, OtpInputHandle } from '../components/OtpInput';
 import { Screen } from '../components/Screen';
 import { Stack } from '../components/Stack';
 import { AuthStackParamList } from '../navigation/AuthNavigator';
@@ -22,7 +22,7 @@ const OtpScreen = ({ route, navigation }: Props) => {
   const { phoneNumber } = route.params;
 
   const [otp, setOtp] = useState("");
-  const otpInputRef = useRef<OtpInutHandle>(null);
+  const otpInputRef = useRef<OtpInputHandle>(null);
 
   const isValidOtp = otp.length === 6;
 

@@ -10,11 +10,11 @@ type Props = {
   length?: number;
 };
 
-export type OtpInutHandle = {
+export type OtpInputHandle = {
   focus: () => void;
 };
 
-export const OtpInput = forwardRef<OtpInutHandle, Props>(
+export const OtpInput = forwardRef<OtpInputHandle, Props>(
   ({ value, onChange, length = 6 }, ref) => {
     const inputRef = useRef<TextInput>(null);
 
