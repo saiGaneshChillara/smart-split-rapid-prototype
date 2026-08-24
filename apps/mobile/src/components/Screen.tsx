@@ -1,6 +1,5 @@
 import { PropsWithChildren } from "react";
 import { KeyboardAvoidingView, Platform, SafeAreaView, StyleSheet } from "react-native";
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { colors, spacing } from "../theme";
 
 type ScreenProps = PropsWithChildren;
