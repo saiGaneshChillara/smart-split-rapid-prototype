@@ -3,7 +3,8 @@ import { z } from "zod";
 const phoneNumber = z
   .string()
   .trim()
-  .regex(/^\+?[1-9]\d{7,14}$/, "must be valid phone number");
+  .regex(/^\+?[1-9]\d{7,14}$/, "must be a valid phone number")
+  .transform((value) => value.replace(/\D/g, ""));
 
 export const requestOtpSchema = z.object({
   phoneNumber,

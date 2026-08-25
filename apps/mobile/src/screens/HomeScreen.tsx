@@ -1,7 +1,10 @@
 import { View, Text } from 'react-native';
 import React from 'react';
+import { useAuth } from '../context/AuthContext';
+import { AppButton } from '../components/AppButton';
 
 const HomeScreen = () => {
+  const { logout } = useAuth();
   return (
     <View
       style={{
@@ -11,6 +14,11 @@ const HomeScreen = () => {
       }}
     >
       <Text>HomeScreen</Text>
+
+      <AppButton 
+        title="Logout"
+        onPress={logout}
+      />
     </View>
   );
 };

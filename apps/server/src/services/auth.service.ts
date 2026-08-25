@@ -41,7 +41,10 @@ export const verifyOtp = async (
   }
 
   if (!name) {
-    throw new ApiError(400, "Name is required for new users");
+    return {
+      requiresRegistration: true,
+      phoneNumber,
+    };
   }
 
   const [newUser] = await db
@@ -54,6 +57,7 @@ export const verifyOtp = async (
     .returning();
   
   return {
+    requiresRegistration: false,
     accessToken: generateAccessToken(newUser.id),
     user: newUser,
   }
