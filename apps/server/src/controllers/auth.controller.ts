@@ -1,10 +1,9 @@
 import { Request, Response } from "express";
+import { RequestOtpInput, VerifyOtpInput } from "../schemas/auth.schema.js";
 import * as authService from "../services/auth.service.js";
-import z from "zod";
-import { requestOtpSchema, verifyOtpSchema } from "../schemas/auth.schema.js";
 
 export const requestOtp = async (
-  req: Request<{}, {}, z.infer<typeof requestOtpSchema>>,
+  req: Request<{}, {}, RequestOtpInput>,
   res: Response,
 ) => {
   const { phoneNumber } = req.body;
@@ -15,7 +14,7 @@ export const requestOtp = async (
 };
 
 export const verifyOtp = async (
-  req: Request<{}, {}, z.infer<typeof verifyOtpSchema>>,
+  req: Request<{}, {}, VerifyOtpInput>,
   res: Response,
 ) => {
   const { phoneNumber, otp, name } = req.body;

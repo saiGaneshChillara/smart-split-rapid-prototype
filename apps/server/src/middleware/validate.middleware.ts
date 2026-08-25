@@ -7,9 +7,14 @@ import { ApiError } from "../errors/ApiError.js";
  * Validates and replaces req.body with the parsed result of schema.
  * Rejects with a 400 ApiError on failure.
  */
-export const validateBody = 
-  (schema: ZodType)  => (req: Request, _res: Response, next: NextFunction) => {
-    const result = schema.safeParse(req.body);
+type RequestProperty = "body" | "params" | "query"
+
+export const validate = 
+  (
+    schema: ZodType,
+    property: RequestProperty = "body",
+  )  => (req: Request, _res: Response, next: NextFunction) => {
+    const result = schema.safeParse(req[property]);
 
     if (!result.success) {
       const message = result.error.issues
@@ -19,7 +24,7 @@ export const validateBody =
       return next(new ApiError(400, message));
     }
 
-    req.body = result.data;
+    req[property] = result.data;
 
     next();
   }
