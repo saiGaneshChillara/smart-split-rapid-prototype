@@ -7,6 +7,7 @@ type AppButtonProps = {
   onPress: () => void;
   loading?: boolean;
   disabled?: boolean;
+  variant?: "primary" | "secondary";
 };
 
 export const AppButton = ({
@@ -14,6 +15,7 @@ export const AppButton = ({
   onPress,
   loading = false,
   disabled = false,
+  variant = "primary",
 }: AppButtonProps) => {
   const isDisabled = disabled || loading;
 
@@ -23,16 +25,29 @@ export const AppButton = ({
       disabled={isDisabled}
       style={({ pressed }) => [
         styles.button,
+        variant === "primary"
+          ? styles.primaryButton
+          : styles.secondaryButton,
         isDisabled && styles.disabled,
-        pressed && !isDisabled && styles.pressed,
+        pressed && styles.pressed,
       ]}
     >
       {loading ? (
-        <ActivityIndicator color={colors.white} />
+        <ActivityIndicator 
+          color={
+            variant === "primary"
+              ? colors.white
+              : colors.primary
+          } 
+        />
       ) : (
         <AppText 
           variant="body"
-          color={colors.white}
+          color={
+            variant === "primary"
+              ? colors.white
+              : colors.primary
+          }
         >
           {title}
         </AppText>
@@ -43,11 +58,19 @@ export const AppButton = ({
 
 const styles = StyleSheet.create({
   button: {
-    backgroundColor: colors.primary,
     paddingVertical: spacing.md,
     borderRadius: 12,
     alignItems: "center",
     justifyContent: "center",
+  },
+  primaryButton: {
+    backgroundColor: colors.primary,
+  },
+  secondaryButton: {
+    backgroundColor: colors.white,
+
+    borderWidth: 1,
+    borderColor: colors.primary,
   },
   pressed: {
     opacity: 0.85,
