@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { ActivityIndicator, Alert } from 'react-native';
+import { ActivityIndicator, Alert, ScrollView } from 'react-native';
 import { getGroups } from '../api/groups';
 import { AppButton } from '../components/AppButton';
 import { AppText } from '../components/AppText';
@@ -68,18 +68,24 @@ const HomeScreen = () => {
           />
         </>
       ) : (
-        <Stack>
-          {groups.map((group) => (
-            <GroupCard
-              key={group.id}
-              group={group}
+        <ScrollView
+          style={{ flex: 1 }}
+          contentContainerStyle={{ flexGrow: 1 }}
+          showsVerticalScrollIndicator={false}
+        >
+          <Stack>
+            {groups.map((group) => (
+              <GroupCard
+                key={group.id}
+                group={group}
+              />
+            ))}
+            <AppButton
+              title="Logout"
+              onPress={logout}
             />
-          ))}
-          <AppButton
-            title="Logout"
-            onPress={logout}
-          />
-        </Stack>
+          </Stack>
+        </ScrollView>
       )}
 
       <CreateGroupModal
