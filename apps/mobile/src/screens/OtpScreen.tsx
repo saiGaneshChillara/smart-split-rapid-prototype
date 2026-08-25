@@ -26,9 +26,9 @@ const OtpScreen = ({ route, navigation }: Props) => {
 
   const isValidOtp = otp.length === 6;
 
-  const { login, loading: authLoading } = useAuth();
+  const { login } = useAuth();
 
-  const [loading, setLoading] = useState(authLoading);
+  const [loading, setLoading] = useState(false);
 
   const handleVerify = async () => {
     try {
