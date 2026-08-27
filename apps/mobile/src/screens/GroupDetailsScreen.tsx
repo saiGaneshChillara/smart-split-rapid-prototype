@@ -1,15 +1,15 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { useEffect, useState } from 'react';
+import { ActivityIndicator, Alert, ScrollView } from 'react-native';
+import { getGroup } from '../api/groups';
 import { AppText } from '../components/AppText';
 import { Card } from '../components/Card';
 import { Screen } from '../components/Screen';
 import { Stack } from '../components/Stack';
 import { AppStackParamList } from '../navigation/AppNavigator';
-import { useEffect, useState } from 'react';
-import { GroupDetails } from '../types/group';
-import { ActivityIndicator, Alert } from 'react-native';
-import { getApiErrorMessage } from '../utils/apiError';
-import { getGroup } from '../api/groups';
 import { colors } from '../theme';
+import { GroupDetails } from '../types/group';
+import { getApiErrorMessage } from '../utils/apiError';
 
 type Props = NativeStackScreenProps<
   AppStackParamList,
@@ -69,57 +69,63 @@ const GroupDetailsScreen = ({ route, navigation }: Props) => {
 
   return (
     <Screen>
-      <Stack spacing='lg'>
-        <AppText variant='heading'>
-          {groupDetails.group.name}
-        </AppText>
+      <ScrollView
+        style={{ flex: 1 }}
+        contentContainerStyle={{ flexGrow: 1 }}
+        showsVerticalScrollIndicator={false}
+      >
+        <Stack spacing='lg'>
+          <AppText variant='heading'>
+            {groupDetails.group.name}
+          </AppText>
 
-        <Card>
-          <Stack spacing="md">
+          <Card>
+            <Stack spacing="md">
+              <AppText variant='heading'>
+                Members: ({groupDetails.members.length})
+              </AppText>
+
+              {groupDetails.members.map(member => (
+                <Stack
+                  key={member.id}
+                  style={{
+                    flexDirection: "row",
+                    justifyContent: "space-between"
+                  }}
+                >
+                  <AppText>
+                    {member.name}
+                  </AppText>
+
+                  <AppText color={colors.textSecondary}>
+                    {member.role}
+                  </AppText>
+                </Stack>
+              ))}
+            </Stack>
+          </Card>
+
+          <Card>
             <AppText variant='heading'>
-              Members: ({groupDetails.members.length})
+              Expenses
             </AppText>
 
-            {groupDetails.members.map(member => (
-              <Stack
-                key={member.id}
-                style={{
-                  flexDirection: "row",
-                  justifyContent: "space-between"
-                }}
-              >
-                <AppText>
-                  {member.name}
-                </AppText>
+            <AppText>
+              Coming soon
+            </AppText>
+          </Card>
 
-                <AppText color={colors.textSecondary}>
-                  {member.role}
-                </AppText>
-              </Stack>
-            ))}
-          </Stack>
-        </Card>
+          <Card>
+            <AppText variant='heading'>
+              Balances
+            </AppText>
 
-        <Card>
-          <AppText variant='heading'>
-            Expenses
-          </AppText>
-
-          <AppText>
-            Coming soon
-          </AppText>
-        </Card>
-
-        <Card>
-          <AppText variant='heading'>
-            Balances
-          </AppText>
-
-          <AppText>
-            Coming soon
-          </AppText>
-        </Card>
-      </Stack>
+            <AppText>
+              Coming soon
+            </AppText>
+          </Card>
+        </Stack>
+      </ScrollView>
     </Screen>
   );
 };

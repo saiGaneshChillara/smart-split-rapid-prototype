@@ -14,7 +14,9 @@ export type GroupMember = {
   role: "ADMIN" | "MEMBER";
 };
 
+export type GroupSummary = Omit<Group, "role">;
+
 export type GroupDetails = {
-  group: Group;
+  group: GroupSummary;
   members: GroupMember[];
 };
