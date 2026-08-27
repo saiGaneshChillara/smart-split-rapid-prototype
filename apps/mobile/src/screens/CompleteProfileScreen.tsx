@@ -37,6 +37,10 @@ const CompleteProfileScreen = ({ route }: Props) => {
         name.trim(),
       );
 
+      if (!response.accessToken || !response.user) {
+        throw new Error("Registration failed");
+      }
+
       await login(
         response.accessToken,
         response.user,

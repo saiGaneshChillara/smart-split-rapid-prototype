@@ -44,6 +44,10 @@ const OtpScreen = ({ route, navigation }: Props) => {
         return;
       }
 
+      if (!response.accessToken || !response.user) {
+        throw new Error("Verification failed");
+      }
+
       await login(response.accessToken, response.user);
     } catch (error) {
       Alert.alert("Verification failed", getApiErrorMessage(error));
