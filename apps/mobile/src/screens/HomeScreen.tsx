@@ -12,9 +12,16 @@ import { Stack } from '../components/Stack';
 import { useAuth } from '../context/AuthContext';
 import { Group } from '../types/group';
 import { getApiErrorMessage } from '../utils/apiError';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { AppStackParamList } from '../navigation/AppNavigator';
 
 const HomeScreen = () => {
   const { logout } = useAuth();
+
+  const navigation = useNavigation<
+    NativeStackNavigationProp<AppStackParamList>
+  >();
 
   const [groups, setGroups] = useState<Group[]>([]);
   const [loading, setLoading] = useState(true);
@@ -78,6 +85,9 @@ const HomeScreen = () => {
               <GroupCard
                 key={group.id}
                 group={group}
+                onPress={() => navigation.navigate("GroupDetails", {
+                  groupId: group.id,
+                })}
               />
             ))}
             <AppButton

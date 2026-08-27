@@ -9,7 +9,7 @@ export const createGroupSchema = z.object({
 });
 
 export const groupParamsSchema = z.object({
-  groupId: z.string().uuid("Invalid group id"),
+  groupId: z.uuid("Invalid group id"),
 });
 
 export type CreateGroupInput = z.infer<typeof createGroupSchema>;

@@ -13,3 +13,9 @@ export const getGroups = async () => {
 
   return response.data.groups;
 };
+
+export const getGroup = async (groupId: string) => {
+  const response = await api.get(`/groups/${groupId}`);
+
+  return response.data;
+};
