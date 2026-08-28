@@ -3,9 +3,9 @@ import { db } from "../db/client.js";
 import { users } from "../db/schema/users.js";
 
 export const searchUsers = async (
-  phoneNumber: string[],
+  phoneNumbers: string[],
 ) => {
-  const uniquePhoneNumbers = [... new Set(phoneNumber)];
+  const uniquePhoneNumbers = [... new Set(phoneNumbers)];
 
   const existingUsers = await db.query.users.findMany({
     where: inArray(
