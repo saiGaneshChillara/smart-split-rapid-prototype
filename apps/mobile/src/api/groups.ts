@@ -1,8 +1,8 @@
-import { GroupDetails } from "../types/group";
+import { Group, GroupDetails, GroupSummary } from "../types/group";
 import { api } from "./client";
 
 export const createGroup = async (name: string) => {
-  const response = await api.post("/groups", { 
+  const response = await api.post<{ group: GroupSummary }>("/groups", { 
     name 
   });
 
@@ -10,7 +10,7 @@ export const createGroup = async (name: string) => {
 };
 
 export const getGroups = async () => {
-  const response = await api.get("/groups");
+  const response = await api.get<{ groups: Group[] }>("/groups");
 
   return response.data.groups;
 };
