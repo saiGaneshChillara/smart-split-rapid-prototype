@@ -20,7 +20,11 @@ export const addMembersSchema = z.object({
         .regex(/^[6-9]\d{9}$/, "Invalid phone number"),
     )
     .min(1, "Select at least one member")
-    .max(100, "Too many members seleted"),
+    .max(100, "Too many members selected")
+    .refine(
+      (numbers) => new Set(numbers).size === numbers.length,
+      "Duplicate phone numbers are not allowed",
+    ),
 });
 
 export type CreateGroupInput = z.infer<typeof createGroupSchema>;

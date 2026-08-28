@@ -106,7 +106,7 @@ export const addMembers = async (
   const requesterMembership = await db.query.group_members.findFirst({
     where: and(
       eq(group_members.group_id, groupId),
-      eq(group_members.group_id, requesterId),
+      eq(group_members.user_id, requesterId),
     ),
   });
 
@@ -151,7 +151,7 @@ export const addMembers = async (
       id: uuid(),
       group_id: groupId,
       user_id: user.id,
-      role: "ADMIN" as const,
+      role: "MEMBER" as const,
     });
 
     added.push(user);
