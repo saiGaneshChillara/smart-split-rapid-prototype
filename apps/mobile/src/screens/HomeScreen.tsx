@@ -17,6 +17,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { AppStackParamList } from '../navigation/AppNavigator';
 import { getDeviceContacts } from '../services/contacts.service';
 import { mapContacts } from '../utils/contactMapper';
+import { searchUsers } from '../api/users';
 
 const HomeScreen = () => {
   const { logout } = useAuth();
@@ -57,8 +58,15 @@ const HomeScreen = () => {
         const rawContacts = await getDeviceContacts();
         const contacts = mapContacts(rawContacts);
 
+        const registeredUsers = await searchUsers(
+          contacts.map((contact) => contact.phoneNumber),
+        );
+
         console.log("Contacts: ", JSON.stringify(contacts));
         console.log("Count: ", contacts.length);
+
+        console.log("Registered Users");
+        console.log(registeredUsers);
       } catch (error) {
         console.log("Failed to load contacts:", error);
       }
