@@ -15,6 +15,8 @@ import { getApiErrorMessage } from '../utils/apiError';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { AppStackParamList } from '../navigation/AppNavigator';
+import { getDeviceContacts } from '../services/contacts.service';
+import { mapContacts } from '../utils/contactMapper';
 
 const HomeScreen = () => {
   const { logout } = useAuth();
@@ -48,6 +50,19 @@ const HomeScreen = () => {
   useEffect(() => {
     fetchGroups();
   }, [fetchGroups]);
+
+  useEffect(() => {
+    const load = async () => {
+      const rawContacts = await getDeviceContacts();
+
+      const contacts = mapContacts(rawContacts);
+
+      console.log("Contacts: ", JSON.stringify(contacts));
+      console.log("Count: ", contacts.length);
+    };
+
+    load();
+  }, []);
 
   if (loading) {
     return (
