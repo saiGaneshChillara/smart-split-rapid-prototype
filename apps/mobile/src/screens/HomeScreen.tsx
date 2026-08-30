@@ -18,6 +18,7 @@ import { AppStackParamList } from '../navigation/AppNavigator';
 import { getDeviceContacts } from '../services/contacts.service';
 import { mapContacts } from '../utils/contactMapper';
 import { searchUsers } from '../api/users';
+import { mergeContacts } from '../utils/mergeContacts';
 
 const HomeScreen = () => {
   const { logout } = useAuth();
@@ -62,11 +63,9 @@ const HomeScreen = () => {
           contacts.map((contact) => contact.phoneNumber),
         );
 
-        console.log("Contacts: ", JSON.stringify(contacts));
-        console.log("Count: ", contacts.length);
+        const merged = mergeContacts(contacts, registeredUsers);
 
-        console.log("Registered Users");
-        console.log(registeredUsers);
+        console.log(merged);
       } catch (error) {
         console.log("Failed to load contacts:", error);
       }
