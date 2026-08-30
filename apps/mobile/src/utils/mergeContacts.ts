@@ -1,6 +1,7 @@
 import { SearchUserResponse } from "../api/users";
 import { Contact } from "../types/contact";
 import { RegisteredContact } from "../types/registeredContact";
+import { normalizePhoneNumber } from "./contactMapper";
 
 export const mergeContacts = (
   contacts: Contact[],
@@ -14,7 +15,8 @@ export const mergeContacts = (
   );
 
   const merged = users.map((user) => {
-    const contact = contactsByPhone.get(user.phone_number);
+    const normalizedUserPhone = normalizePhoneNumber(user.phone_number) ?? user.phone_number;
+    const contact = contactsByPhone.get(normalizedUserPhone);
 
     return {
       userId: user.id,

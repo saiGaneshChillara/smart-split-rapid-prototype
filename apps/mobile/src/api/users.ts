@@ -9,7 +9,7 @@ export type SearchUserResponse = {
 export const searchUsers = async (
   phoneNumbers: string[],
 ): Promise<SearchUserResponse[]> => {
-  const response = await api.post("/users/search", {
+  const response = await api.post<{ users: SearchUserResponse[] }>("/users/search", {
     phoneNumbers,
   });
 

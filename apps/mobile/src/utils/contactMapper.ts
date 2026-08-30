@@ -1,7 +1,7 @@
 import * as Contacts from "expo-contacts";
 import { Contact } from "../types/contact";
 
-const normalizePhoneNumber = (phoneNumber: string): string | null => {
+export const normalizePhoneNumber = (phoneNumber: string): string | null => {
   const digits = phoneNumber.replace(/\D/g, "");
 
   if (digits.length === 10 && /^[6-9]/.test(digits)) {
