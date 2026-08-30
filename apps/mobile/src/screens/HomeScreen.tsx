@@ -53,12 +53,15 @@ const HomeScreen = () => {
 
   useEffect(() => {
     const load = async () => {
-      const rawContacts = await getDeviceContacts();
+      try {
+        const rawContacts = await getDeviceContacts();
+        const contacts = mapContacts(rawContacts);
 
-      const contacts = mapContacts(rawContacts);
-
-      console.log("Contacts: ", JSON.stringify(contacts));
-      console.log("Count: ", contacts.length);
+        console.log("Contacts: ", JSON.stringify(contacts));
+        console.log("Count: ", contacts.length);
+      } catch (error) {
+        console.log("Failed to load contacts:", error);
+      }
     };
 
     load();
