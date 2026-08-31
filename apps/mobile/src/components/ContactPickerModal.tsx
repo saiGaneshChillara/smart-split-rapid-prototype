@@ -15,12 +15,14 @@ type Props = {
   visible: boolean;
   onClose: () => void;
   onConfirm: (users: RegisteredContact[]) => void;
+  excludeUserIds?: string[];
 };
 
 export const ContactPickerModal = ({
   visible,
   onClose,
   onConfirm,
+  excludeUserIds,
 }: Props) => {
   const [contacts, setContacts] = useState<RegisteredContact[]>([]);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
@@ -38,6 +40,9 @@ export const ContactPickerModal = ({
       return;
     }
 
+    setSelectedIds([]);
+    setQuery("");
+
     const loadContacts = async () => {
       try {
         setLoading(true);
@@ -53,7 +58,7 @@ export const ContactPickerModal = ({
         const mergedContacts = mergeContacts(
           mappedContacts,
           users,
-        );
+        ).filter(contact => !excludeUserIds?.includes(contact.userId));
 
         setContacts(mergedContacts)
       } catch (error) {

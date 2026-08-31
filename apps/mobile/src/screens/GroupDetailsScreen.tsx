@@ -114,6 +114,7 @@ const GroupDetailsScreen = ({ route, navigation }: Props) => {
             <ContactPickerModal 
               visible={pickerVisible}
               onClose={() => setPickerVisible(false)}
+              excludeUserIds={groupDetails.members.map(m => m.id)}
               onConfirm={(users) => {
                 console.log(users);
                 setPickerVisible(false);
