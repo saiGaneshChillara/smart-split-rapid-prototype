@@ -10,6 +10,8 @@ import { AppStackParamList } from '../navigation/AppNavigator';
 import { colors } from '../theme';
 import { GroupDetails } from '../types/group';
 import { getApiErrorMessage } from '../utils/apiError';
+import { AppButton } from '../components/AppButton';
+import { ContactPickerModal } from '../components/ContactPickerModal';
 
 type Props = NativeStackScreenProps<
   AppStackParamList,
@@ -21,6 +23,8 @@ const GroupDetailsScreen = ({ route, navigation }: Props) => {
 
   const [loading, setLoading] = useState(true);
   const [groupDetails, setGroupDetails] = useState<GroupDetails | null>(null);
+
+  const [pickerVisible, setPickerVisible] = useState(false);
 
   useEffect(() => {
     const loadGroup = async () => {
@@ -102,6 +106,19 @@ const GroupDetailsScreen = ({ route, navigation }: Props) => {
                   </AppText>
                 </Stack>
               ))}
+            <AppButton 
+              title='Add Members'
+              variant='secondary'
+              onPress={() => setPickerVisible(true)}
+            />
+            <ContactPickerModal 
+              visible={pickerVisible}
+              onClose={() => setPickerVisible(false)}
+              onConfirm={(users) => {
+                console.log(users);
+                setPickerVisible(false);
+              }}
+            />
             </Stack>
           </Card>
 
