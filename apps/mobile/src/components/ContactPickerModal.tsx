@@ -14,7 +14,7 @@ import { ContactRow } from "./ContactRow";
 type Props = {
   visible: boolean;
   onClose: () => void;
-  onConfirm: (users: RegisteredContact[]) => void;
+  onConfirm: (users: RegisteredContact[]) => Promise<void>;
   excludeUserIds?: string[];
 };
 
@@ -28,11 +28,32 @@ export const ContactPickerModal = ({
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [query, setQuery] = useState("");
   const [loading, setLoading] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
 
   const filteredContacts = contacts.filter(contact => contact.displayName.toLowerCase().includes(query.toLowerCase()));
 
   const toggleSelection = (userId: string) => {
     setSelectedIds(current => current.includes(userId) ? current.filter(id => id !== userId) : [...current, userId]);
+  };
+
+  const handleClose = () => {
+    setSelectedIds([]);
+    setQuery("");
+    onClose();
+  };
+
+  const handleConfirm = async () => {
+    if (submitting) return;
+
+    setSubmitting(true);
+
+    try {
+      const selectedUsers = contacts.filter(contact => selectedIds.includes(contact.userId));
+
+      await onConfirm(selectedUsers);
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   useEffect(() => {
@@ -111,18 +132,14 @@ export const ContactPickerModal = ({
 
         <AppButton 
           title={`Add (${selectedIds.length})`}
-          disabled={selectedIds.length === 0}
-          onPress={() => {
-            const selectedUsers = contacts.filter(contact => selectedIds.includes(contact.userId));
-
-            onConfirm(selectedUsers);
-          }}
+          disabled={selectedIds.length === 0 || submitting}
+          onPress={handleConfirm}
         />
 
         <AppButton 
           title="Cancel"
           variant="secondary"
-          onPress={onClose}
+          onPress={handleClose}
         />
       </Screen>
     </Modal>

@@ -1,7 +1,7 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { ActivityIndicator, Alert, ScrollView } from 'react-native';
-import { getGroup } from '../api/groups';
+import { addMembers, getGroup } from '../api/groups';
 import { AppText } from '../components/AppText';
 import { Card } from '../components/Card';
 import { Screen } from '../components/Screen';
@@ -12,6 +12,7 @@ import { GroupDetails } from '../types/group';
 import { getApiErrorMessage } from '../utils/apiError';
 import { AppButton } from '../components/AppButton';
 import { ContactPickerModal } from '../components/ContactPickerModal';
+import { RegisteredContact } from '../types/registeredContact';
 
 type Props = NativeStackScreenProps<
   AppStackParamList,
@@ -26,34 +27,55 @@ const GroupDetailsScreen = ({ route, navigation }: Props) => {
 
   const [pickerVisible, setPickerVisible] = useState(false);
 
+  const loadGroup = useCallback(async () => {
+    try {
+      setLoading(true);
+
+      const data = await getGroup(groupId);
+
+      setGroupDetails(data);
+    } catch (error) {
+      Alert.alert(
+        "Unable to load group",
+        getApiErrorMessage(error),
+        [
+          {
+            text: "OK",
+            onPress: () => navigation.replace("Home"),
+          },
+        ]
+      )
+    } finally {
+      setLoading(false);
+    }
+  }, [groupId, navigation]);
+
   useEffect(() => {
-    const loadGroup = async () => {
-      try {
-        setLoading(true);
-
-        const data = await getGroup(groupId);
-
-        setGroupDetails(data);
-      } catch (error) {
-        Alert.alert(
-          "Unable to load group",
-          getApiErrorMessage(error),
-          [
-            {
-              text: "OK",
-              onPress: () => {
-                navigation.replace("Home");
-              },
-            },
-          ],
-        );
-      } finally {
-        setLoading(false);
-      }
-    };
-
     loadGroup();
-  }, [groupId]);
+  }, [loadGroup]);
+
+  const handleAddMembers = async (
+    users: RegisteredContact[],
+  ) => {
+    try {
+      await addMembers(
+        groupId,
+        users.map(user => user.phoneNumber),
+      );
+
+      Alert.alert(
+        "Success",
+        `${users.length} member${users.length === 1 ? "" : "s"} added.`,
+      );
+
+      setPickerVisible(false);
+    } catch (error) {
+      Alert.alert(
+        "Unable to add members",
+        getApiErrorMessage(error),
+      );
+    }
+  };
 
   if (loading) {
     return (
@@ -115,10 +137,7 @@ const GroupDetailsScreen = ({ route, navigation }: Props) => {
               visible={pickerVisible}
               onClose={() => setPickerVisible(false)}
               excludeUserIds={groupDetails.members.map(m => m.id)}
-              onConfirm={(users) => {
-                console.log(users);
-                setPickerVisible(false);
-              }}
+              onConfirm={handleAddMembers}
             />
             </Stack>
           </Card>

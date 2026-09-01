@@ -65,7 +65,6 @@ const HomeScreen = () => {
 
         const merged = mergeContacts(contacts, registeredUsers);
 
-        console.log(merged);
       } catch (error) {
         console.log("Failed to load contacts:", error);
       }
