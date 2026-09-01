@@ -63,12 +63,15 @@ const GroupDetailsScreen = ({ route, navigation }: Props) => {
         users.map(user => user.phoneNumber),
       );
 
+
+      await loadGroup();
+
+      setPickerVisible(false);
+      
       Alert.alert(
         "Success",
         `${users.length} member${users.length === 1 ? "" : "s"} added.`,
       );
-
-      setPickerVisible(false);
     } catch (error) {
       Alert.alert(
         "Unable to add members",
