@@ -1,0 +1,21 @@
+import * as Contacts from "expo-contacts";
+
+export const getDeviceContacts = async (): Promise<Contacts.ExistingContact[]> => {
+  let { status } = await Contacts.getPermissionsAsync();
+
+  if (status !== "granted") {
+    ({ status } = await Contacts.requestPermissionsAsync());
+  }
+
+  if (status !== "granted") {
+    throw new Error("Contacts permission denied");
+  }
+
+  const { data } = await Contacts.getContactsAsync({
+    fields: [
+      Contacts.Fields.PhoneNumbers,
+    ],
+  });
+
+  return data;
+};

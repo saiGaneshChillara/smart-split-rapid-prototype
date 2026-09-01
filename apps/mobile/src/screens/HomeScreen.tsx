@@ -15,6 +15,10 @@ import { getApiErrorMessage } from '../utils/apiError';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { AppStackParamList } from '../navigation/AppNavigator';
+import { getDeviceContacts } from '../services/contacts.service';
+import { mapContacts } from '../utils/contactMapper';
+import { searchUsers } from '../api/users';
+import { mergeContacts } from '../utils/mergeContacts';
 
 const HomeScreen = () => {
   const { logout } = useAuth();
@@ -48,6 +52,26 @@ const HomeScreen = () => {
   useEffect(() => {
     fetchGroups();
   }, [fetchGroups]);
+
+  useEffect(() => {
+    const load = async () => {
+      try {
+        const rawContacts = await getDeviceContacts();
+        const contacts = mapContacts(rawContacts);
+
+        const registeredUsers = await searchUsers(
+          contacts.map((contact) => contact.phoneNumber),
+        );
+
+        const merged = mergeContacts(contacts, registeredUsers);
+
+      } catch (error) {
+        console.log("Failed to load contacts:", error);
+      }
+    };
+
+    load();
+  }, []);
 
   if (loading) {
     return (

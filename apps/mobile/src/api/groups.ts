@@ -20,3 +20,12 @@ export const getGroup = async (groupId: string): Promise<GroupDetails> => {
 
   return response.data;
 };
+
+export const addMembers = async (
+  groupId: string,
+  phoneNumbers: string[],
+) => {
+  await api.post(`/groups/${groupId}/members`, {
+    phoneNumbers,
+  });
+};

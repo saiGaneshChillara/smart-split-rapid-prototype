@@ -28,6 +28,10 @@ export const formatRelativeDate = (date: string | Date) => {
     return "yesterday";
   }
 
+  if (days < 7) {
+    return `${days} days ago`;
+  }
+
   if (days < 30) {
     const weeks = Math.floor(days / 7);
     return `${weeks} week${weeks === 1 ? "" : "s"} ago`;
