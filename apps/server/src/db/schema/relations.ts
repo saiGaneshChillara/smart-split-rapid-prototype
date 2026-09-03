@@ -78,14 +78,6 @@ export const expenseItemsRelations = relations(
       fields: [expense_items.expense_id],
       references: [expenses.id],
     }),
-    parentItem: one(expense_items, {
-      fields: [expense_items.parent_item_id],
-      references: [expense_items.id],
-      relationName: "expenseItemHierarchy",
-    }),
-    childItems: many(expense_items, {
-      relationName: "expenseItemHierarchy",
-    }),
     participants: many(expense_item_participants),
   }),
 );

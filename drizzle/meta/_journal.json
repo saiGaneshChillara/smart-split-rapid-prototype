@@ -57,6 +57,13 @@
       "when": 1786391896511,
       "tag": "0007_high_the_order",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1788403697576,
+      "tag": "0008_even_shadowcat",
+      "breakpoints": true
     }
   ]
 }
