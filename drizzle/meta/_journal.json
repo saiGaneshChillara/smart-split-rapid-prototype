@@ -64,6 +64,13 @@
       "when": 1788403697576,
       "tag": "0008_even_shadowcat",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1788886935297,
+      "tag": "0009_clean_banshee",
+      "breakpoints": true
     }
   ]
 }
