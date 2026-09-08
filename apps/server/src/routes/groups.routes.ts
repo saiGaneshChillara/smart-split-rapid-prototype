@@ -36,4 +36,9 @@ router.post(
   groupsController.addMembers,
 );
 
+router.use(
+  "/:groupId/expenses",
+  expensesRouter,
+);
+
 export default router;

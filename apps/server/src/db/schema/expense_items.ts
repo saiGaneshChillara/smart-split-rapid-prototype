@@ -16,8 +16,6 @@ export const expense_items = pgTable(
     expense_id: uuid("expense_id")
       .notNull()
       .references(() => expenses.id, { onDelete: "cascade" }),
-    parent_item_id: uuid("parent_item_id")
-      .references((): AnyPgColumn => expense_items.id, { onDelete: "cascade" }),
     item_name: text("item_name").notNull(),
     amount: integer("amount").notNull(),
     split_type: expenseItemSplitType("split_type")
