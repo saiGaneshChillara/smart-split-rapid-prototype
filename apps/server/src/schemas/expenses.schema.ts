@@ -14,7 +14,16 @@ const participantSchema = z.object({
     .number()
     .min(1, "Percentage should be atleast 1")
     .max(100, "Percentage should be maximum 100")
-    .optional(),
+    .optional()
+    .refine(
+      (val) => {
+        if (val === undefined) {
+          return true;
+        }
+        return (Number.isInteger(val * 100));
+      },
+      "Percentage can be atmost 2 decimals",
+    ),
 })
 .refine(
   (data) => !(data.amount !== undefined && data.percentage !== undefined),
