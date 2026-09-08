@@ -4,6 +4,7 @@ import * as groupsController from "../controllers/groups.controller.js";
 import { authenticate } from "../middleware/auth.middleware.js";
 import { validate } from "../middleware/validate.middleware.js";
 import { addMembersSchema, createGroupSchema, groupParamsSchema } from "../schemas/groups.schema.js";
+import expensesRouter from "./expenses.route.js";
 
 
 const router = Router();
