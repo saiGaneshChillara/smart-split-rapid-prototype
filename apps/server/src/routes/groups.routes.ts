@@ -1,11 +1,9 @@
 import { Router } from "express";
 
 import * as groupsController from "../controllers/groups.controller.js";
-import expensesRouter from "./expenses.route.js";
 import { authenticate } from "../middleware/auth.middleware.js";
 import { validate } from "../middleware/validate.middleware.js";
 import { addMembersSchema, createGroupSchema, groupParamsSchema } from "../schemas/groups.schema.js";
-import { createExpenseSchema } from "../schemas/expenses.schema.js";
 
 
 const router = Router();
@@ -38,11 +36,9 @@ router.post(
   groupsController.addMembers,
 );
 
-router.post(
+router.use(
   "/:groupId/expenses",
-  authenticate,
-  validate(createExpenseSchema),
   expensesRouter,
-)
+);
 
 export default router;
