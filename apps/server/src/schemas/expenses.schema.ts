@@ -9,7 +9,7 @@ const contributorSchema = z.object({
 
 const participantSchema = z.object({
   userId: z.uuid("Invalid user id"),
-  amount: z.number().positive().optional(),
+  amount: z.number().int().positive().optional(),
   percentage: z
     .number()
     .min(1, "Percentage should be atleast 1")
@@ -61,7 +61,7 @@ export const createExpenseSchema = z.object({
   "Duplicate contributors are not allowed",
 );
 
-export const groupExpenseParams = z.object({
+export const groupExpenseParamsSchema = z.object({
   groupId: z.string().uuid("Invalid group id"),
   expenseId: z.string().uuid("Invalid expense id"),
 });
