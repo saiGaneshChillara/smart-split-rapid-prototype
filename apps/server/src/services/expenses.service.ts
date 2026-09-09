@@ -225,4 +225,78 @@ export const addExpense = async (
       expenseId,
     };
   });
-};    
+};
+
+export const getExpense = async (
+  groupId: string,
+  expenseId: string,
+  userId: string,
+) => {
+
+  const membership = await db.query.group_members.findFirst({
+    where: and(
+      eq(group_members.group_id, groupId),
+      eq(group_members.user_id, userId),
+    ),
+  });
+
+  if (!membership) {
+    throw new ApiError(404, "Group not found");
+  }
+
+  const expense = await db.query.expenses.findFirst({
+    where: and(
+      eq(expenses.id, expenseId),
+      eq(expenses.group_id, groupId),
+    ),
+    with: {
+      creator: true,
+      contributors: {
+        with: {
+          contributor: true,
+        }
+      },
+      items: {
+        with: {
+          participants: {
+            with: {
+              participant: true,
+            }
+          },
+        },
+      }
+    }
+  });
+
+  if (!expense) {
+    throw new ApiError(404, "Expense not found");
+  }
+
+  return {
+    expense: {
+      id: expense.id,
+      description: expense.description,
+      created_at: expense.created_at,
+      created_by: {
+        id: expense.creator?.id,
+        name: expense.creator?.name,
+      },
+    },
+    contributors: expense.contributors.map(contributor => ({
+      id: contributor.user_id,
+      amount: contributor.amount,
+      name: contributor.contributor.name,
+    })),
+    expense_items: expense.items.map((item) => ({
+      id: item.id,
+      item_name: item.item_name,
+      amount: item.amount,
+      split_type: item.split_type,
+      participants: item.participants.map(participant => ({
+        id: participant.user_id,
+        amount: participant.amount,
+        name: participant.participant.name,
+      })),
+    })),
+  };
+};

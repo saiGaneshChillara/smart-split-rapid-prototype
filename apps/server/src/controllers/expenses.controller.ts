@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import * as expensesService from "../services/expenses.service.js";
 import { GroupParams } from "../schemas/groups.schema.js";
-import { CreateExpenseInput } from "../schemas/expenses.schema.js";
+import { CreateExpenseInput, GroupExpenseParams } from "../schemas/expenses.schema.js";
 
 export const addExpense = async (
   req: Request<GroupParams, {}, CreateExpenseInput>,
@@ -14,4 +14,17 @@ export const addExpense = async (
   );
 
   res.status(201).json(result);
+};
+
+export const getExpense = async (
+  req: Request<GroupExpenseParams>,
+  res: Response,
+) => {
+  const result = await expensesService.getExpense(
+    req.params.groupId,
+    req.params.expenseId,
+    req.user.id,
+  );
+
+  res.status(200).json(result);
 };

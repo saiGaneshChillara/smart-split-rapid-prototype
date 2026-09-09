@@ -13,4 +13,11 @@ router.post(
   expensesController.addExpense,
 );
 
+router.get(
+  "/:expenseId",
+  authenticate,
+  validate(groupParamsSchema, "params"),
+  expensesController.getExpense,
+);
+
 export default router;

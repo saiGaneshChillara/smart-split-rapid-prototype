@@ -61,4 +61,11 @@ export const createExpenseSchema = z.object({
   "Duplicate contributors are not allowed",
 );
 
+export const groupExpenseParams = z.object({
+  groupId: z.string().uuid("Invalid group id"),
+  expenseId: z.string().uuid("Invalid expense id"),
+});
+
 export type CreateExpenseInput = z.infer<typeof createExpenseSchema>;
+
+export type GroupExpenseParams = z.infer<typeof groupExpenseParams>;
