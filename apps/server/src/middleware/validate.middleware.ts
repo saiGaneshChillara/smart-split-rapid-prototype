@@ -26,7 +26,11 @@ export const validate =
       return next(new ApiError(400, message));
     }
 
-    req[property] = result.data;
+    if (property === "query") {
+      req.validatedQuery = result.data
+    } else {
+      req[property] = result.data;
+    }
 
     next();
   }

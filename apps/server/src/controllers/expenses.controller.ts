@@ -31,13 +31,13 @@ export const getExpense = async (
 };
 
 export const getAllExpenses = async (
-  req: Request<GroupParams, {}, {}, ExpensePaginationInput, {}>,
+  req: Request<GroupParams>,
   res: Response,
 ) => {
   const result = await expensesService.getAllExpenses(
     req.params.groupId,
     req.user.id,
-    req.query,
+    req.validatedQuery as ExpensePaginationInput,
   );
 
   res.status(200).json(result);
