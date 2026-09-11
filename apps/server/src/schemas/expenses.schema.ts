@@ -68,4 +68,4 @@ export const groupExpenseParamsSchema = z.object({
 
 export type CreateExpenseInput = z.infer<typeof createExpenseSchema>;
 
-export type GroupExpenseParams = z.infer<typeof groupExpenseParams>;
+export type GroupExpenseParams = z.infer<typeof groupExpenseParamsSchema>;

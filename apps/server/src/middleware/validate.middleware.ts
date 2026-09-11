@@ -18,7 +18,9 @@ export const validate =
 
     if (!result.success) {
       const message = result.error.issues
-        .map((issue) => `${issue.path.join(".") || "body"}: ${issue.message}`)
+        .map(
+          (issue) => `${issue.path.join(".") || property}: ${issue.message}`
+        )
         .join(", ");
 
       return next(new ApiError(400, message));

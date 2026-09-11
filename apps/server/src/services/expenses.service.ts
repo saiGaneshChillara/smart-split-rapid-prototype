@@ -1,4 +1,4 @@
-import { and, eq, inArray } from "drizzle-orm";
+import { and, desc, eq, inArray, lt, or } from "drizzle-orm";
 import { db } from "../db/client.js";
 import { CreateExpenseInput } from "../schemas/expenses.schema.js";
 import { group_members } from "../db/schema/group_members.js";
@@ -8,6 +8,8 @@ import { expenses } from "../db/schema/expenses.js";
 import { expense_contributors } from "../db/schema/expense_contributors.js";
 import { expense_items } from "../db/schema/expense_items.js";
 import { expense_item_participants } from "../db/schema/expense_item_participants.js";
+import { ExpenseCursor, ExpensePaginationInput } from "../schemas/pagination.schema.js";
+import { decodeExpenseCursor, encodeExpenseCursor } from "../utils/cursor.js";
 
 export const addExpense = async (
   groupId: string,
@@ -298,5 +300,84 @@ export const getExpense = async (
         name: participant.participant.name,
       })),
     })),
+  };
+};
+
+export const getAllExpenses = async (
+  groupId: string,
+  userId: string,
+  pagination: ExpensePaginationInput,
+) => {
+  const membership = await db.query.group_members.findFirst({
+    where: and(
+      eq(group_members.group_id, groupId),
+      eq(group_members.user_id, userId),
+    ),
+  });
+
+  if (!membership) {
+    throw new ApiError(404, "Group not found");
+  }
+
+  const { limit, cursor } = pagination;
+
+  let decodedCursor: ExpenseCursor | undefined;
+
+  if (cursor) {
+    decodedCursor = decodeExpenseCursor(cursor);
+  }
+
+  const whereCondition = decodedCursor 
+    ? and(
+      eq(expenses.group_id, groupId),
+      or(
+        lt(expenses.created_at, decodedCursor.createdAt),
+        and(
+          eq(expenses.created_at, decodedCursor.createdAt),
+          lt(expenses.id, decodedCursor.id),
+        ),
+      )
+    )
+    : eq(expenses.group_id, groupId);
+
+  const resultExpenses = await db.query.expenses.findMany({
+    where: whereCondition,
+    orderBy: [
+      desc(expenses.created_at),
+      desc(expenses.id),
+    ],
+    limit: limit + 1,
+    with: {
+      creator: true,
+    }
+  });
+
+  const hasNextPage = resultExpenses.length > limit;
+
+  let nextCursor: string | null = null;
+
+  if (hasNextPage) {
+    resultExpenses.pop();
+    const lastExp = resultExpenses[resultExpenses.length - 1];
+
+    nextCursor = encodeExpenseCursor({
+      createdAt: lastExp.created_at,
+      id: lastExp.id,
+    });
+  }
+
+  const responseExpenses = resultExpenses.map(exp => ({
+    id: exp.id,
+    description: exp.description,
+    created_at: exp.created_at,
+    created_by: {
+      id: exp.creator?.id,
+      name: exp.creator?.name,
+    }
+  }));
+
+  return {
+    expenses: responseExpenses,
+    nextCursor,
   };
 };
