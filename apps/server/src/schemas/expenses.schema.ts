@@ -20,7 +20,10 @@ const participantSchema = z.object({
         if (val === undefined) {
           return true;
         }
-        return (Number.isInteger(val * 100));
+
+        const scaled = val * 100;
+        const EPSILON = 0.000001;
+        return Math.abs(scaled - Math.round(scaled)) < EPSILON;
       },
       "Percentage can be atmost 2 decimals",
     ),
