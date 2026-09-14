@@ -71,6 +71,13 @@
       "when": 1788886935297,
       "tag": "0009_clean_banshee",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1789398000960,
+      "tag": "0010_deep_spiral",
+      "breakpoints": true
     }
   ]
 }

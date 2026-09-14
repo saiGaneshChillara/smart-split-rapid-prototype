@@ -1,4 +1,4 @@
-import { AnyPgColumn, check, integer, pgEnum, pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
+import { check, integer, pgEnum, pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
 import { expenses } from "./expenses.js";
 import { sql } from "drizzle-orm";
 
