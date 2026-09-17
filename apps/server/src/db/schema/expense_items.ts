@@ -1,6 +1,6 @@
-import { check, integer, pgEnum, pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
-import { expenses } from "./expenses.js";
 import { sql } from "drizzle-orm";
+import { check, integer, pgEnum, pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
+import { expense_versions } from "./expense_versions.js";
 
 export const expenseItemSplitType = pgEnum("expense_item_split_type", [
   "EQUAL",
@@ -13,9 +13,9 @@ export const expense_items = pgTable(
   "expense_items",
   {
     id: uuid("id").primaryKey(),
-    expense_id: uuid("expense_id")
+    expense_version_id: uuid("expense_version_id")
       .notNull()
-      .references(() => expenses.id, { onDelete: "cascade" }),
+      .references(() => expense_versions.id, { onDelete: "cascade" }),
     item_name: text("item_name").notNull(),
     amount: integer("amount").notNull(),
     split_type: expenseItemSplitType("split_type")

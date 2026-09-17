@@ -78,6 +78,20 @@
       "when": 1789398000960,
       "tag": "0010_deep_spiral",
       "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "7",
+      "when": 1789399054990,
+      "tag": "0011_backfill_expense_versions",
+      "breakpoints": true
+    },
+    {
+      "idx": 12,
+      "version": "7",
+      "when": 1789662685153,
+      "tag": "0012_many_stick",
+      "breakpoints": true
     }
   ]
 }
